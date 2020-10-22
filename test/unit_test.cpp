@@ -1,22 +1,33 @@
-// #define BOOST_TEST_STATIC_LINK
-// #define BOOST_TEST_MAIN
+#define BOOST_TEST_MAIN
 
-// #define BOOST_TEST_MODULE MachineTest
-// #include <boost/test/unit_test.hpp> 
+#define BOOST_TEST_MODULE MachineTest
 
-// #include <machine/precompiled.h>
-// #include <machine/sources/machine.h>
+#include <boost/test/unit_test.hpp>
 
-// #include <string>
+#include <machine/precompiled.h>
+#include <machine/sources/machine.h>
 
-// BOOST_AUTO_TEST_CASE(my_boost_test)
-// {
-//     bool expected_value = true;
-//     std::stringstream in;
-//     in << '4';
+#include <string>
 
-//     // assume MyClass is defined in MyClass.h
-//     // and get_value() has public accessibility
-//     machine::Machine mc;
-//     BOOST_CHECK(1 == 1);
-// }
+
+bool operator == (const std::stringstream& first, const std::stringstream& second) {
+    return first.str() == second.str();
+}
+
+BOOST_AUTO_TEST_CASE(empty_input)
+{
+    std::stringstream expected;
+    expected << "";
+    
+    std::stringstream is;
+    is << '4';
+    
+    std::stringstream result;
+
+    machine::Machine mc;
+
+    is >> mc;
+    result << mc.result.str();
+
+    BOOST_CHECK(result == expected);
+}

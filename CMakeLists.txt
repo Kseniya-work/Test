@@ -10,24 +10,24 @@ include_directories(${PROJECT_SOURCE_DIR}/..)
 message(${PROJECT_SOURCE_DIR})
 
 
-# find_package(
-#     Boost 1.66 
-#             COMPONENTS unit_test_framework
-#     REQUIRED
-# )
+find_package(
+    Boost 1.66 
+        COMPONENTS unit_test_framework # system filesystem 
+    REQUIRED
+)
 
-# if(Boost_FOUND)
-#     include_directories(${Boost_INCLUDE_DIRS})
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS}  ${BOOST_LIBRARIES})
 
-#     message(${Boost_INCLUDE_DIRS})
-#     message(${Boost_LIBRARY_DIRS})
-#     message("using boost " 
-#         ${Boost_MAJOR_VERSION} "."
-#         ${Boost_MINOR_VERSION} "."
-#         ${Boost_SUBMINOR_VERSION}
-#         " version"
-#     )
-# endif()
+    message(${Boost_INCLUDE_DIRS})
+    message(${Boost_LIBRARY_DIRS})
+    message("using boost " 
+        ${Boost_MAJOR_VERSION} "."
+        ${Boost_MINOR_VERSION} "."
+        ${Boost_SUBMINOR_VERSION}
+        " version"
+    )
+endif()
 
 set(SOURCES
     ${PROJECT_SOURCE_DIR}/sources/machine_call.cpp
@@ -78,21 +78,22 @@ add_executable(${TARGET_EXE_NAME}
 )
 
 set(TARGET_UNIT_TEST_NAME machine_unit_test)
-# ADD_DEFINITIONS(-DBOOST_TEST_DYN_LINK) 
-# add_executable(${TARGET_UNIT_TEST_NAME} 
-#     ${PROJECT_SOURCE_DIR}/test/unit_test.cpp
-# )
+ADD_DEFINITIONS(-DBOOST_TEST_DYN_LINK) 
+add_executable(${TARGET_UNIT_TEST_NAME} 
+    ${PROJECT_SOURCE_DIR}/test/unit_test.cpp
+)
 
 if((CMAKE_CXX_COMPILER_ID MATCHES "Clang") OR CMAKE_COMPILER_IS_GNUCXX)
     target_link_libraries(${TARGET_EXE_NAME} ${TARGET_LIB_NAME}) 
-    # target_link_libraries(${TARGET_UNIT_TEST_NAME} ${TARGET_LIB_NAME} ${BOOST_LIBRARIES}) 
+    target_link_libraries(${TARGET_UNIT_TEST_NAME} ${TARGET_LIB_NAME} boost_unit_test_framework)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_link_libraries(${TARGET_EXE_NAME} ${TARGET_LIB_NAME})
-    # target_link_libraries(${TARGET_UNIT_TEST_NAME} ${TARGET_LIB_NAME} ${BOOST_LIBRARIES})
+    target_link_libraries(${TARGET_UNIT_TEST_NAME} ${TARGET_LIB_NAME} boost_unit_test_framework)
 endif()
 
-# enable_testing()
-# add_test(MachineTest ${TARGET_UNIT_TEST_NAME})
+enable_testing()
+add_test(NAME ${TARGET_UNIT_TEST_NAME} COMMAND ${TARGET_UNIT_TEST_NAME})
+
 
 install(
     TARGETS ${TARGET_EXE_NAME} ${TARGET_LIB_NAME}
