@@ -12,8 +12,8 @@ namespace machine
                                                    low_line);
 
             result << number.str();
-            result << (_ill_flag ? "\t ILL\n" : 
-                                 _is_valid(number) ? "\n" : "\t ERR\n");
+            result << (_ill_flag ? "\tILL\n" : 
+                                 _is_valid(number) ? "\n" : "\tERR\n");
 
             is.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // skip blank line
 
