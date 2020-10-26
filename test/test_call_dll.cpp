@@ -5,5 +5,5 @@
 
 int main()
 {
-    machine_call("data/result.txt", "data/input.txt");
+    machine_call("machine/test/data/result.txt", "machine/test/data/input.txt");
 }
